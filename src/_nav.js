@@ -27,7 +27,7 @@ const _nav = [
   {
     component: CNavItem,
     name: 'History Bank',
-    to: '/theme/typography',
+    to: '/master-bank/history-bank',
     icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
   },
   {
