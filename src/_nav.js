@@ -16,7 +16,7 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 const _nav = [
   {
     component: CNavTitle,
-    name: 'Data Master',
+    name: 'Bank Admin',
   },
   {
     component: CNavItem,
@@ -26,43 +26,58 @@ const _nav = [
   },
   {
     component: CNavItem,
-    name: 'Master User',
+    name: 'History Bank',
     to: '/theme/typography',
     icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
   },
   {
+    component: CNavTitle,
+    name: 'Telepon Admin',
+  },
+  {
     component: CNavItem,
-    name: 'Master Pelanggan',
+    name: 'Master Telkom',
     to: '/theme/typography',
     icon: <CIcon icon={cilPeople} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,
-    name: 'Transaksi Nasabah',
+    name: 'Laporan Penunggakan',
     to: '/theme/typography',
     icon: <CIcon icon={cilMoney} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,
-    name: 'Cek Saldo',
+    name: 'Laporan Pelunasan',
     to: '/theme/typography',
     icon: <CIcon icon={cilWallet} customClassName="nav-icon" />,
   },
   {
+
+    component: CNavTitle,
+    name: 'Nasabah',
+  },
+  {
     component: CNavItem,
-    name: 'Setor',
+    name: 'Cek Saldo',
     to: '/theme/typography',
     icon: <CIcon icon={cilDollar} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,
-    name: 'Ambil',
+    name: 'Setor Tunai',
     to: '/theme/typography',
     icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,
-    name: 'Transfer Antar Rekening',
+    name: 'Tarik Tunai',
+    to: '/theme/typography',
+    icon: <CIcon icon={cilBank} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Transfer',
     to: '/theme/typography',
     icon: <CIcon icon={cilBank} customClassName="nav-icon" />,
   },
