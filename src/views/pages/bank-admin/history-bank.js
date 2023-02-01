@@ -31,7 +31,7 @@ class historyBank extends Component {
 
     componentDidMount() {
         fetch(
-            "http://localhost:7070/api/transaksi-nasabah/getOptionsTrnb")
+            "http://localhost:7070/api/history-nasabah/getHstnb")
             .then((res) => res.json())
             .then((json) => {
                 this.setState({
@@ -53,13 +53,6 @@ class historyBank extends Component {
 
         const columns = [
             {
-                // key: 'idTransaksiNasabah',
-                // label: 'ID Transaksi',
-                // _props: { scope: 'col' },
-                name: 'idTransaksiNasabah',
-        selector: row => row.idTransaksiNasabah,
-            },
-            {
                 // key: 'tanggal',
                 // label: 'Tanggal',
                 // _props: { scope: 'col' },
@@ -71,30 +64,36 @@ class historyBank extends Component {
                 name: 'No Rekening',
                 // _props: { scope: 'col' },
             },
+            
             {
-                key: 'statusKet',
-                label: 'Status',
-                _props: { scope: 'col' },
+                name: 'Nominal',
+                selector: row => row.uangNasabah,
             },
             {
-                key: 'statusNasabah',
-                label: 'Nama',
-                _props: { scope: 'col' },
+                name: 'No Rekening Dituju',
+                selector: row => row.noRekeningDituju
             },
+            // {
+            //     key: 'noTelepon',
+            //     label: 'No Telepon',
+            // },
+            
+            
             {
-                key: 'uangNasabah',
-                label: 'Nominal',
-                _props: { scope: 'col' },
-            },
-            {
-                key: 'noRekeningDituju',
-                label: 'No Rekening Dituju',
-                _props: { scope: 'col' },
-            },
-            {
-                key: 'noTelepon',
-                label: 'No Telepon',
-                _props: { scope: 'col' },
+                name: 'Status Ket.',
+                selector: row => {
+                    if(row.statusKet === '1'){
+                        return 'Setor'
+                    } else if (row.statusKet === '2'){
+                        return 'Ambil'
+                    } else if (row.statusKet === '3'){
+                        return 'Transfer'
+                    } else if (row.statusKet === '4'){
+                        return 'Bayar Telepon'
+                    } else {
+                        return ''
+                    }
+                }
             },
         ]
         // const items = [

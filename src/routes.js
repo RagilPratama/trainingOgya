@@ -113,7 +113,7 @@ const routes = [
 
   //NASABAH
   { path: '/nasabah/cek-saldo', name: 'Cek Saldo', element: cekSaldo},
-  // { path: '/nasabah/setor-tunai', name: 'Setor Tunai', element: setorTunai},
+  { path: '/nasabah/setor-tunai', name: 'Setor Tunai', element: setorTunai},
   // { path: '/nasabah/tarik-tunai', name: 'Tarik Tunai', element: tarikTunai},
   // { path: '/nasabah/transfer', name: 'Transfer', element: transfer},
 
