@@ -3,7 +3,6 @@ import CIcon from '@coreui/icons-react'
 import {
   cilBank,
   cilDollar,
-  cilDrop,
   cilMoney,
   cilPencil,
   cilPeople,
@@ -21,8 +20,8 @@ const _nav = [
   {
     component: CNavItem,
     name: 'Master Bank',
-    to: '/theme/colors',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+    to: '/master-bank/master-bank',
+    icon: <CIcon icon={cilBank} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,

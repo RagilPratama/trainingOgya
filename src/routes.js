@@ -51,7 +51,7 @@ const Toasts = React.lazy(() => import('./views/notifications/toasts/Toasts'))
 const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 
 //MASTER BANK
-
+const masterBank = React.lazy(() => import('./views/pages/bank-admin/master-bank.js'))
 const historyBank = React.lazy(() => import('./views/pages/bank-admin/history-bank.js'))
 
 //NASABAH
@@ -108,7 +108,7 @@ const routes = [
   { path: '/widgets', name: 'Widgets', element: Widgets },
 
   //master bank
-
+  { path: '/master-bank/master-bank', name: 'Master Bank', element: masterBank},
   { path: '/master-bank/history-bank', name: 'History Bank', element: historyBank},
 
   //NASABAH
