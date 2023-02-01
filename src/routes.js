@@ -54,6 +54,13 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 
 const historyBank = React.lazy(() => import('./views/pages/bank-admin/history-bank.js'))
 
+//NASABAH
+const cekSaldo = React.lazy(() => import('./views/pages/nasabah/cek-saldo.js'))
+const setorTunai = React.lazy(() => import('./views/pages/nasabah/setor-tunai.js'))
+const tarikTunai = React.lazy(() => import('./views/pages/nasabah/tarik-tunai.js'))
+const transfer = React.lazy(() => import('./views/pages/nasabah/transfer.js'))
+
+
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
@@ -103,6 +110,13 @@ const routes = [
   //master bank
 
   { path: '/master-bank/history-bank', name: 'History Bank', element: historyBank},
+
+  //NASABAH
+  { path: '/nasabah/cek-saldo', name: 'Cek Saldo', element: cekSaldo},
+  // { path: '/nasabah/setor-tunai', name: 'Setor Tunai', element: setorTunai},
+  // { path: '/nasabah/tarik-tunai', name: 'Tarik Tunai', element: tarikTunai},
+  // { path: '/nasabah/transfer', name: 'Transfer', element: transfer},
+
 ]
 
 export default routes

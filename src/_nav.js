@@ -60,25 +60,25 @@ const _nav = [
   {
     component: CNavItem,
     name: 'Cek Saldo',
-    to: '/theme/typography',
+    to: '/nasabah/cek-saldo',
     icon: <CIcon icon={cilDollar} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,
     name: 'Setor Tunai',
-    to: '/theme/typography',
+    to: '/nasabah/setor-tunai',
     icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,
     name: 'Tarik Tunai',
-    to: '/theme/typography',
+    to: '/nasabah/tarik-tunai',
     icon: <CIcon icon={cilBank} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,
     name: 'Transfer',
-    to: '/theme/typography',
+    to: '/nasabah/transfer',
     icon: <CIcon icon={cilBank} customClassName="nav-icon" />,
   },
   {

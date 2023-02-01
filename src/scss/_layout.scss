@@ -4,3 +4,15 @@
   will-change: auto;
   @include transition(padding .15s);
 }
+
+.form-input {
+  margin-left: 25%;
+  margin-right: 25%;
+  width:50%;
+
+  
+}
+
+.row-form-input {
+  margin-top: auto;
+}
