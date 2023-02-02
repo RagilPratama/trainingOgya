@@ -25,7 +25,9 @@ class historyBank extends Component {
 
         this.state = {
             datas: [],
-            items: []
+            items: [],
+            currentPage: 1,
+            sizePerPage: 5,
         }
     }
 
@@ -55,6 +57,19 @@ class historyBank extends Component {
 
     render() {
         const columns = [
+            {
+                selector: (cell, row, rowIndex) => {
+                    let rowNumber = (this.state.currentPage - 1) * this.state.sizePerPage + (row + 1);
+                    return <span>{rowNumber}</span>;
+                },
+                name: 'No',
+                headerAlign: 'center',
+                align: 'center',
+                editable: false,
+                headerStyle: (colum, colIndex) => {
+                    return { width: '50px' };
+                },
+            },
             {
                 // key: 'tanggal',
                 // label: 'Tanggal',
@@ -125,7 +140,7 @@ class historyBank extends Component {
         const customStyles = {
             rows: {
                 style: {
-                    // minHeight: '72px', // override the row height
+                    minHeight: '60px', // override the row height
                 },
             },
             headCells: {
@@ -145,8 +160,6 @@ class historyBank extends Component {
 
 
         return (
-
-
             <CRow>
                 <CCol xs={12}>
                     <CCard className="mb-4">
@@ -162,7 +175,6 @@ class historyBank extends Component {
                                 highlightOnHover
                                 striped
                                 customStyles={customStyles}>
-
                             </DataTable>
 
                             {/* <CSmartTable

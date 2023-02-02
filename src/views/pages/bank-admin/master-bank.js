@@ -25,7 +25,9 @@ class masterBank extends Component {
 
         this.state = {
             datas: [],
-            items: []
+            items: [],
+            currentPage: 1,
+            sizePerPage: 5,
         }
     }
 
@@ -63,6 +65,19 @@ class masterBank extends Component {
 
     render() {
         const columns = [
+            {
+                selector: (cell, row, rowIndex) => {
+                    let rowNumber = (this.state.currentPage - 1) * this.state.sizePerPage + (row + 1);
+                    return <span>{rowNumber}</span>;
+                },
+                name: 'No',
+                headerAlign: 'center',
+                align: 'center',
+                editable: false,
+                headerStyle: (colum, colIndex) => {
+                    return { width: '50px' };
+                },
+            },
             {
                 name: 'No Rekening',
                 selector: row => row.noRekening,
@@ -137,7 +152,7 @@ class masterBank extends Component {
         const customStyles = {
             rows: {
                 style: {
-                    // minHeight: '72px', // override the row height
+                    minHeight: '60px', // override the row height
                 },
             },
             headCells: {
