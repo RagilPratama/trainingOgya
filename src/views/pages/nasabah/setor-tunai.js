@@ -39,12 +39,12 @@ class setorTunai extends Component {
         this.state = {
             datas: [],
             items: [],
-            openModal : false,
-            noRekening : '',
-            dataRekening : [],
-            nama : '',
+            openModal: false,
+            noRekening: '',
+            dataRekening: [],
+            nama: '',
             saldo: '',
-            jumlah :0,
+            jumlah: 0,
 
         }
     }
@@ -62,84 +62,78 @@ class setorTunai extends Component {
     }
 
     handleChange = (e) => {
-        this.setState({noRekening : e.target.value})
+        this.setState({ noRekening: e.target.value })
     }
     handleChangeJumlah = (e) => {
-        this.setState({jumlah : e.target.value})
+        this.setState({ jumlah: e.target.value })
     }
 
     getSaldo = () => {
-
-        if(this.state.noRekening !== ''){
+        if (this.state.noRekening !== '') {
             fetch(
                 "http://localhost:7070/api/master-bank/getMasterBank?noRekening=" + this.state.noRekening
             ).then((res) => res.json())
                 .then((json) => {
-                    
 
-                    if(json.data.data.length !== 0){
+
+                    if (json.data.data.length !== 0) {
 
                         let arr = json.data.data
-                        this.setState({dataRekening: arr}, () => this.cekSaldo())
+                        this.setState({ dataRekening: arr }, () => this.cekSaldo())
                     } else {
                         Swal.fire({
-                        title: 'Info!',
-                        text: 'No Rekening Tidak Ditemukan',
-                        icon: 'info',
-                        confirmButtonText: 'OK'
-                    })
+                            title: 'Info!',
+                            text: 'No Rekening Tidak Ditemukan',
+                            icon: 'info',
+                            confirmButtonText: 'OK'
+                        })
                     }
                     console.log('json >>', json.data.data);
                 })
-                
+
         } else {
-                Swal.fire({
-                    title: 'Info!',
-                    text: 'Mohon Masukkan No Rekening',
-                    icon: 'info',
-                    confirmButtonText: 'OK'
-                })
+            Swal.fire({
+                title: 'Info!',
+                text: 'Mohon Masukkan No Rekening',
+                icon: 'info',
+                confirmButtonText: 'OK'
+            })
         }
-        
-        
     }
 
     cekSaldo = (e) => {
-
         const nama = this.state.dataRekening[0].nama
         const saldo = this.state.dataRekening[0].saldo
         console.log(nama)
         this.setState({ openModal: true, nama: nama, saldo: saldo })
-    
+
     }
 
     setorTunai = (e) => {
         console.log('nominal setor', this.state.jumlah)
+
     }
 
     handleOpenModal = () => {
         this.setState({ openModal: !this.state.openModal })
     }
-    
-
 
 
     render() {
-
         const columns = [
             {
                 // key: 'idTransaksiNasabah',
                 // label: 'ID Transaksi',
                 // _props: { scope: 'col' },
                 name: 'idTransaksiNasabah',
-        selector: row => row.idTransaksiNasabah,
+                selector: row => row.idTransaksiNasabah,
             },
             {
                 // key: 'tanggal',
                 // label: 'Tanggal',
                 // _props: { scope: 'col' },
                 name: 'Tanggal',
-        selector: row => row.tanggal,
+                selector: row => row.tanggal,
             },
             {
                 selector: row => row.noRekening,
@@ -218,9 +212,6 @@ class setorTunai extends Component {
 
 
         return (
-            
-
-
             <CRow>
                 <CCol xs={12}>
                     <CCard className="mb-4">
@@ -239,14 +230,10 @@ class setorTunai extends Component {
                             <br></br>
                             <CRow className="form-group row mt-2">
                                 {/* <CCol xs = "20" md="8" className="mt-2"> */}
-                                <CButton  color="info" style={{display:'flex', justifyContent:'center', width: '20%', margin:'auto'}} onClick={this.getSaldo} >Cek Rekening</CButton>
+                                <CButton color="info" style={{ display: 'flex', justifyContent: 'center', width: '20%', margin: 'auto' }} onClick={this.getSaldo} >Cek Rekening</CButton>
                                 {/* </CCol> */}
                             </CRow>
-
                         </div>
-
-
-
                         <CCardBody>
                         </CCardBody>
                     </CCard>
@@ -287,7 +274,7 @@ class setorTunai extends Component {
                                     {/* </CCol> */}
                                 </CRow>
                             </div>
-                            
+
                         </CModalBody>
                         <CModalFooter>
                         </CModalFooter>

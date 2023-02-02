@@ -30,6 +30,11 @@ class historyBank extends Component {
     }
 
     componentDidMount() {
+        this.getHistoryBank()
+    }
+
+
+    getHistoryBank = () => {
         fetch(
             "http://localhost:7070/api/history-nasabah/getHstnb")
             .then((res) => res.json())
@@ -41,16 +46,14 @@ class historyBank extends Component {
             })
     }
 
-
-    getHistoryBank = () => {
-
-
+    formatRupiah = (number) => {
+        return new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR"
+        }).format(number);
     }
 
-
-
     render() {
-
         const columns = [
             {
                 // key: 'tanggal',
@@ -67,7 +70,7 @@ class historyBank extends Component {
             
             {
                 name: 'Nominal',
-                selector: row => row.uangNasabah,
+                selector: row => this.formatRupiah(row.uangNasabah),
             },
             {
                 name: 'No Rekening Dituju',

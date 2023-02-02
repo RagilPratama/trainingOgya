@@ -30,6 +30,10 @@ class masterBank extends Component {
     }
 
     componentDidMount() {
+        this.getmasterBank()
+    }
+
+    getmasterBank = () => {
         fetch(
             "http://localhost:7070/api/master-bank/getMasterBank")
             .then((res) => res.json())
@@ -42,7 +46,18 @@ class masterBank extends Component {
             })
     }
 
-    getmasterBank = () => {
+    formatRupiah = (number) => {
+        return new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR"
+        }).format(number);
+    }
+
+    edit = () => {
+
+    }
+
+    delete = () => {
 
     }
 
@@ -51,7 +66,6 @@ class masterBank extends Component {
             {
                 name: 'No Rekening',
                 selector: row => row.noRekening,
-                // _props: { scope: 'col' },
             },
             {
                 name: 'Nama',
@@ -67,7 +81,7 @@ class masterBank extends Component {
             },
             {
                 name: 'Saldo',
-                selector: row => row.saldo
+                selector: row => this.formatRupiah(row.saldo)
             },
             {
                 name: 'User ID',
@@ -75,9 +89,27 @@ class masterBank extends Component {
             },
             {
                 name: 'Aksi',
-                // selector: row => row.userID
+                // cell: (cellContent, row) => (
+                //     <td>
+                //         <CButtonGroup>
+                //             <CButton color="primary"> Edit </CButton>
+                //         </CButtonGroup>
+                //     </td>
+                // )
+                formatter: (value, row, index, field) => {
+                    return <td>
+                        <CButtonGroup>
+                            <CButton type="button" class="btn btn-default btn-sm" onclick={this.edit()}>,
+                                <i class="far fa-pencil-alt"></i>
+                            </CButton>
+                            <CButton type="button" class="btn btn-default btn-sm" onclick={this.delete()}>,
+                                <i class="far fa-trash-alt"></i>
+                            </CButton>
+                        </CButtonGroup>
+                    </td>
+                }
             },
-        ]
+        ];
 
         // const items = [
         //     {
@@ -138,8 +170,8 @@ class masterBank extends Component {
                                 responsive
                                 highlightOnHover
                                 striped
-                                customStyles={customStyles}>
-
+                                customStyles={customStyles}
+                            >
                             </DataTable>
 
                             {/* <CSmartTable
