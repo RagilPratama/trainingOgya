@@ -12,12 +12,24 @@ import {
     CTableHead,
     CTableHeaderCell,
     CTableRow,
-    CSmartTable
+    CSmartTable,
+    CAccordion,
+    CAccordionHeader,
+    CAccordionBody,
+    CFormLabel,
+    CFormInput,
+    CButton,
+    CModal,
+    CModalHeader,
+    CModalBody,
+    CModalFooter,
+    CModalTitle
 } from '@coreui/react'
 import { DocsExample } from 'src/components'
 import DataTable from 'react-data-table-component';
-
-// const masterBank = () => {
+import CIcon from '@coreui/icons-react';
+import { cilPlus } from '@coreui/icons';
+import Swal from 'sweetalert2'
 
 class masterBank extends Component {
     constructor(props) {
@@ -26,6 +38,14 @@ class masterBank extends Component {
         this.state = {
             datas: [],
             items: [],
+            noRekening: null,
+            nama: '',
+            alamat: '',
+            noTelepon: null,
+            saldo: null,
+            user_id: null,
+
+            openModal: false,
             currentPage: 1,
             sizePerPage: 5,
         }
@@ -53,6 +73,14 @@ class masterBank extends Component {
             style: "currency",
             currency: "IDR"
         }).format(number);
+    }
+
+    handleOpenModal = () => {
+        this.setState({ openModal: !this.state.openModal })
+    }
+
+    addData = () => {
+
     }
 
     edit = () => {
@@ -114,10 +142,10 @@ class masterBank extends Component {
                 formatter: (value, row, index, field) => {
                     return <td>
                         <CButtonGroup>
-                            <CButton type="button" class="btn btn-default btn-sm" onclick={this.edit()}>,
+                            <CButton type="button" class="btn btn-default btn-sm" onclick={this.edit}>,
                                 <i class="far fa-pencil-alt"></i>
                             </CButton>
-                            <CButton type="button" class="btn btn-default btn-sm" onclick={this.delete()}>,
+                            <CButton type="button" class="btn btn-default btn-sm" onclick={this.delete}>,
                                 <i class="far fa-trash-alt"></i>
                             </CButton>
                         </CButtonGroup>
@@ -176,6 +204,9 @@ class masterBank extends Component {
                     <CCard className="mb-4">
                         <CCardHeader>
                             <strong>Master Bank</strong>
+                            <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <CButton color="primary" className="me-md-2" style={{ marginBottom: '20px' }} onClick={this.handleOpenModal}><CIcon icon={cilPlus} /> Tambah </CButton>
+                            </div>
                         </CCardHeader>
                         <CCardBody>
                             <DataTable
@@ -188,8 +219,45 @@ class masterBank extends Component {
                                 customStyles={customStyles}
                             >
                             </DataTable>
+                        </CCardBody>
+                    </CCard>
+                </CCol>
 
-                            {/* <CSmartTable
+                <>
+                    <CModal alignment="center" visible={this.state.openModal} onClose={this.handleOpenModal}>
+                        <CModalHeader>
+                            <CModalTitle>Tambah Data</CModalTitle>
+                        </CModalHeader>
+                        <CModalBody>
+                            <div>
+                                <CRow className="form-group row mt-2">
+                                    <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">Nama</CFormLabel>
+                                    <CCol xs="10" md="8" className="mt-2">
+                                        {this.state.nama}
+                                    </CCol>
+                                </CRow>
+                                <br></br>
+                                <CRow className="form-group row mt-2">
+                                    <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">No Rekening</CFormLabel>
+                                    <CCol xs="10" md="8" className="mt-2">
+                                        {this.state.noRekening}
+                                    </CCol>
+                                </CRow>
+                                <br></br>
+                                <CRow className="form-group row mt-2">
+                                    <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">Saldo</CFormLabel>
+                                    <CCol xs="10" md="8" className="mt-2">
+                                        <strong>{this.formatRupiah(this.state.saldo)} </strong>
+                                    </CCol>
+                                </CRow>
+                            </div>
+                        </CModalBody>
+                        <CModalFooter>
+                        </CModalFooter>
+                    </CModal>
+                </>
+
+                {/* <CSmartTable
                                 items={this.state.items}
                                 fields={columns}
                                 columnFilter
@@ -246,9 +314,6 @@ class masterBank extends Component {
                                         }
                                 }}
                             /> */}
-                        </CCardBody>
-                    </CCard>
-                </CCol>
             </CRow>
         );
     }

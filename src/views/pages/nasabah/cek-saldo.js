@@ -65,16 +65,12 @@ class cekSaldo extends Component {
     }
 
     getSaldo = () => {
-
         if (this.state.noRekening !== '') {
             fetch(
                 "http://localhost:7070/api/master-bank/getMasterBank?noRekening=" + this.state.noRekening
             ).then((res) => res.json())
                 .then((json) => {
-
-
                     if (json.data.data.length !== 0) {
-
                         let arr = json.data.data
                         this.setState({ dataRekening: arr }, () => this.cekSaldo())
                     } else {
@@ -96,17 +92,13 @@ class cekSaldo extends Component {
                 confirmButtonText: 'OK'
             })
         }
-
-
     }
 
     cekSaldo = (e) => {
-
         const nama = this.state.dataRekening[0].nama
         const saldo = this.state.dataRekening[0].saldo
         console.log(nama)
         this.setState({ openModal: true, nama: nama, saldo: saldo })
-
     }
 
     handleOpenModal = () => {
