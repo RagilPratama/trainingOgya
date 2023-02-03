@@ -36,7 +36,7 @@ const _nav = [
   {
     component: CNavItem,
     name: 'Master Telkom',
-    to: '/theme/typography',
+    to: '/master-telkom/master-telkom',
     icon: <CIcon icon={cilPeople} customClassName="nav-icon" />,
   },
   {

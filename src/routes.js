@@ -54,6 +54,9 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 const masterBank = React.lazy(() => import('./views/pages/bank-admin/master-bank.js'))
 const historyBank = React.lazy(() => import('./views/pages/bank-admin/history-bank.js'))
 
+//ADMIN TELEPON
+const masterTelkom = React.lazy(() => import('./views/pages/telepon-admin/master-telkom.js'))
+
 //NASABAH
 const cekSaldo = React.lazy(() => import('./views/pages/nasabah/cek-saldo.js'))
 const setorTunai = React.lazy(() => import('./views/pages/nasabah/setor-tunai.js'))
@@ -110,6 +113,9 @@ const routes = [
   //master bank
   { path: '/master-bank/master-bank', name: 'Master Bank', element: masterBank},
   { path: '/master-bank/history-bank', name: 'History Bank', element: historyBank},
+
+  //telepon admin
+  { path: '/master-telkom/master-telkom', name: 'Master Telkom', element: masterTelkom},
 
   //NASABAH
   { path: '/nasabah/cek-saldo', name: 'Cek Saldo', element: cekSaldo},
