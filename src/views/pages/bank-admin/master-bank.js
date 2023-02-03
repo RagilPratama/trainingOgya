@@ -121,7 +121,7 @@ class masterBank extends Component {
 
                 json.data.data.forEach((item) => {
                     this.setState({
-                        userID: item.userId,
+                        userId: item.userId,
                         nama: item.nama,
                         alamat: item.alamat,
                         noTelepon: item.noTelepon
@@ -441,14 +441,14 @@ class masterBank extends Component {
                                 <CRow className="form-group row mt-4 mb-4">
                                     <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">User ID</CFormLabel>
                                     <CCol xs="10" md="8" className="mt-2">
-                                        <CFormInput size='md' id="userId" name="userId" onChange={this.handleChangeUserID}>
+                                        <CFormSelect size='md' id="userId" name="userId" onChange={this.handleChangeUserID}>
                                             <option value=''>Silakan Pilih</option>
                                             {this.state.userID_option.map((el) => {
                                                 return (
                                                     <option value={el.value}>{el.label}</option>
                                                 )
                                             })}
-                                        </CFormInput>
+                                        </CFormSelect>
                                     </CCol>
                                 </CRow>
 

@@ -61,17 +61,17 @@ const _nav = [
     to: '/nasabah/tarik-tunai',
     icon: <CIcon icon={cilBank} customClassName="nav-icon" />,
   },
-  {
-    component: CNavItem,
-    name: 'Transfer',
-    to: '/nasabah/transfer',
-    icon: <CIcon icon={cilBank} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'Bayar Telpon',
-    to: '/theme/typography',
-    icon: <CIcon icon={cilPhone} customClassName="nav-icon" />,
-  },
+  // {
+  //   component: CNavItem,
+  //   name: 'Transfer',
+  //   to: '/nasabah/transfer',
+  //   icon: <CIcon icon={cilBank} customClassName="nav-icon" />,
+  // },
+  // {
+  //   component: CNavItem,
+  //   name: 'Bayar Telpon',
+  //   to: '/theme/typography',
+  //   icon: <CIcon icon={cilPhone} customClassName="nav-icon" />,
+  // },
 ]
 export default _nav
