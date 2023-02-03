@@ -40,13 +40,17 @@ class masterBank extends Component {
             datas: [],
             items: [],
             noRekening: '',
+            saldo: '',
+            userID_option: [],
+            statusEdit: false,
+
+            // data table users
+            userId: '',
             nama: '',
             alamat: '',
             noTelepon: '',
-            saldo: '',
-            userID: '',
-            statusEdit: false,
 
+            blocking: false,
             openModal: false,
             currentPage: 1,
             sizePerPage: 5,
@@ -55,19 +59,22 @@ class masterBank extends Component {
 
     componentDidMount() {
         this.getmasterBank()
+        this.setUserID()
     }
 
     getmasterBank = () => {
+        this.setState({ blocking: true });
         fetch(
             "http://localhost:7070/api/master-bank/getMasterBank")
             .then((res) => res.json())
             .then((json) => {
-                console.log(json, "<<<<<<")
                 this.setState({
                     items: json.data.data,
                     DataisLoaded: true
                 }, () => console.log(json));
-            })
+            }).catch((error) => {
+                this.setState({ blocking: false });
+            });
     }
 
     formatRupiah = (number) => {
@@ -100,19 +107,47 @@ class masterBank extends Component {
         this.setState({ saldo: e.target.value.replace(/\D/, '') })
     }
 
-    handleChangeUserID = (e) => {
-        this.setState({ userID: e.target.value.replace(/\D/, '') })
-
+    setUserID = () => {
+        this.setState({ blocking: true });
+        this.setState({ userID_option: [] })
+        let newData = [];
         fetch(
-            "http://localhost:7070/api/master-bank/getMasterBank")
+            "http://localhost:7070/api/user/getAllUser")
             .then((res) => res.json())
             .then((json) => {
-                console.log(json, "<<<<<<")
+                // console.log(json.data.data, "<<<<<< USERS")
+
+                json.data.data.forEach(el => {
+                    console.log(el, "<<<<< EL")
+                    const obj = { "value": el.userId, "label": el.userId, "name": el.userId }
+                    newData.push(obj);
+                });
+                console.log(newData, "<<<<<< NEW DATA USERS")
                 this.setState({
-                    items: json.data.data,
-                    DataisLoaded: true
-                }, () => console.log(json));
-            })
+                    userID_option: newData
+                });
+            }).catch((error) => {
+                this.setState({ blocking: false });
+            });
+    }
+
+    handleChangeUserID = (e) => {
+        console.log(e, "<<<< EVENT USER ID")
+        // console.log(e.target[0].label, "<<<< EVENT USER ID")
+
+        // fetch(
+        //     "http://localhost:7070/api/user/getAllUser")
+        //     .then((res) => res.json())
+        //     .then((json) => {
+        //         // console.log(json.data.data, "<<<<<< USERS")
+
+        //         let x = json.data.data.filter(el => {
+        //             el.userId === e.target[0].label
+        //         });
+        //         console.log(x, "<<<<<< X")
+        //     }).catch((error) => {
+        //         this.setState({ blocking: false });
+        //     });
     }
 
     handleOpenModal = () => {
@@ -265,7 +300,6 @@ class masterBank extends Component {
             },
         };
 
-
         return (
             <CRow>
                 <CCol xs={12}>
@@ -301,7 +335,18 @@ class masterBank extends Component {
                                 <CRow className="form-group row mt-4 mb-4">
                                     <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">User ID</CFormLabel>
                                     <CCol xs="10" md="8" className="mt-2">
-                                        <CFormSelect size='md' type="text" id="userID" placeholder="Masukkan User ID" onChange={this.handleChangeUserID} value={this.state.userID} />
+                                        <CFormSelect size='md' id="userId" name="userId" accessKey={this.state.userId} value={this.state.userID_option} onChange={this.handleChangeUserID}
+                                            // options={
+                                            //     this.state.userID_option
+                                            // }
+                                        >
+                                            <option value=''>Silakan Pilih</option>
+                                            {this.state.userID_option.map((el) => {
+                                                return (
+                                                    <option value={el.value}>{el.label}</option>
+                                                )
+                                            })}
+                                        </CFormSelect>
                                     </CCol>
                                 </CRow>
 
