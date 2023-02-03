@@ -36,23 +36,10 @@ const _nav = [
   {
     component: CNavItem,
     name: 'Master Telkom',
-    to: '/master-telkom/master-telkom',
+    to: '/telepon-admin/master-telkom',
     icon: <CIcon icon={cilPeople} customClassName="nav-icon" />,
   },
   {
-    component: CNavItem,
-    name: 'Laporan Penunggakan',
-    to: '/theme/typography',
-    icon: <CIcon icon={cilMoney} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'Laporan Pelunasan',
-    to: '/theme/typography',
-    icon: <CIcon icon={cilWallet} customClassName="nav-icon" />,
-  },
-  {
-
     component: CNavTitle,
     name: 'Nasabah',
   },

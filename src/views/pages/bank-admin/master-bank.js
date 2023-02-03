@@ -23,7 +23,8 @@ import {
     CModalHeader,
     CModalBody,
     CModalFooter,
-    CModalTitle
+    CModalTitle,
+    CFormSelect
 } from '@coreui/react'
 import { DocsExample } from 'src/components'
 import DataTable from 'react-data-table-component';
@@ -38,12 +39,13 @@ class masterBank extends Component {
         this.state = {
             datas: [],
             items: [],
-            noRekening: null,
+            noRekening: '',
             nama: '',
             alamat: '',
-            noTelepon: null,
-            saldo: null,
-            user_id: null,
+            noTelepon: '',
+            saldo: '',
+            userID: '',
+            statusEdit: false,
 
             openModal: false,
             currentPage: 1,
@@ -88,6 +90,9 @@ class masterBank extends Component {
     }
 
     handleChangeNoTelepon = (e) => {
+        if (e.target.value.length > 13) {
+            return false;
+        }
         this.setState({ noTelepon: e.target.value.replace(/\D/, '') })
     }
 
@@ -95,12 +100,55 @@ class masterBank extends Component {
         this.setState({ saldo: e.target.value.replace(/\D/, '') })
     }
 
+    handleChangeUserID = (e) => {
+        this.setState({ userID: e.target.value.replace(/\D/, '') })
+
+        fetch(
+            "http://localhost:7070/api/master-bank/getMasterBank")
+            .then((res) => res.json())
+            .then((json) => {
+                console.log(json, "<<<<<<")
+                this.setState({
+                    items: json.data.data,
+                    DataisLoaded: true
+                }, () => console.log(json));
+            })
+    }
+
     handleOpenModal = () => {
-        this.setState({ openModal: !this.state.openModal })
+        this.setState({ openModal: true })
+    }
+
+    handleCloseModal = () => {
+        this.setState({ openModal: false })
     }
 
     addData = () => {
-
+        // this.setState({
+        //     datas: [...this.state.datas, {
+        //         noRekening: this.state.noRekening,
+        //         nama: this.state.nama,
+        //         alamat: this.state.alamat,
+        //         noTelepon: this.state.noTelepon,
+        //         saldo: this.state.saldo,
+        //         userID: this.state.userID
+        //     }],
+        //     noRekening: '',
+        //     nama: '',
+        //     alamat: '',
+        //     noTelepon: '',
+        //     saldo: '',
+        //     userID: ''
+        // })
+        const data = {
+            noRekening: this.state.noRekening,
+            nama: this.state.nama,
+            alamat: this.state.alamat,
+            noTelepon: this.state.noTelepon,
+            saldo: this.state.saldo,
+            userID: this.state.userID
+        }
+        console.log("DATA : ", data)
     }
 
     edit = () => {
@@ -244,37 +292,44 @@ class masterBank extends Component {
                 </CCol>
 
                 <>
-                    <CModal alignment="center" style={{ width: '100%', height: '100%' }} visible={this.state.openModal} onClose={this.handleOpenModal}>
+                    <CModal alignment="center" style={{ width: '100%', height: '100%' }} visible={this.state.openModal} onClose={this.handleCloseModal}>
                         <CModalHeader>
                             <CModalTitle>Tambah Data</CModalTitle>
                         </CModalHeader>
                         <CModalBody>
                             <div>
-                                <CRow className="form-group row mt-4">
-                                    <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">No. Rekening</CFormLabel>
+                                <CRow className="form-group row mt-4 mb-4">
+                                    <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">User ID</CFormLabel>
                                     <CCol xs="10" md="8" className="mt-2">
-                                        <CFormInput size='md' type="text" id="noRekening" placeholder="Masukkan No Rekening" onChange={this.handleChangeNoRekening} value={this.state.noRekening} />
+                                        <CFormSelect size='md' type="text" id="userID" placeholder="Masukkan User ID" onChange={this.handleChangeUserID} value={this.state.userID} />
                                     </CCol>
                                 </CRow>
 
                                 <CRow className="form-group row mt-4">
                                     <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">Nama</CFormLabel>
                                     <CCol xs="10" md="8" className="mt-2">
-                                        <CFormInput size='md' type="text" id="nama" placeholder="Masukkan Nama Lengkap" onChange={this.handleChangeNama} value={this.state.nama} />
+                                        <CFormInput size='md' type="text" id="nama" placeholder="Masukkan Nama Lengkap" onChange={this.handleChangeNama} value={this.state.nama} disabled />
                                     </CCol>
                                 </CRow>
 
                                 <CRow className="form-group row mt-4">
                                     <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">Alamat</CFormLabel>
                                     <CCol xs="10" md="8" className="mt-2">
-                                        <CFormInput size='md' type="text" id="alamat" placeholder="Masukkan Alamat" onChange={this.handleChangeAlamat} value={this.state.alamat} />
+                                        <CFormInput size='md' type="text" id="alamat" placeholder="Masukkan Alamat" onChange={this.handleChangeAlamat} value={this.state.alamat} disabled />
                                     </CCol>
                                 </CRow>
 
                                 <CRow className="form-group row mt-4">
                                     <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">No. Telepon</CFormLabel>
                                     <CCol xs="10" md="8" className="mt-2">
-                                        <CFormInput size='md' type="text" id="noTelepon" placeholder="Masukkan No. Telepon" onChange={this.handleChangeNoTelepon} value={this.state.noTelepon} />
+                                        <CFormInput size='md' type="text" id="noTelepon" placeholder="Masukkan No. Telepon" onChange={this.handleChangeNoTelepon} value={this.state.noTelepon} disabled />
+                                    </CCol>
+                                </CRow>
+
+                                <CRow className="form-group row mt-4">
+                                    <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">No. Rekening</CFormLabel>
+                                    <CCol xs="10" md="8" className="mt-2">
+                                        <CFormInput size='md' type="text" id="noRekening" placeholder="Masukkan No Rekening" onChange={this.handleChangeNoRekening} value={this.state.noRekening} />
                                     </CCol>
                                 </CRow>
 
@@ -287,10 +342,10 @@ class masterBank extends Component {
                             </div>
                         </CModalBody>
                         <CModalFooter>
-                            <CButton color="danger" onClick={() => this.setState({ openModal: false })}>
+                            <CButton color="danger" onClick={this.handleCloseModal}>
                                 Batal
                             </CButton>
-                            <CButton color="primary" onClick={() => this.addData}>
+                            <CButton color="primary" onClick={() => this.addData()}>
                                 Simpan
                             </CButton>
                         </CModalFooter>

@@ -115,7 +115,7 @@ const routes = [
   { path: '/master-bank/history-bank', name: 'History Bank', element: historyBank},
 
   //telepon admin
-  { path: '/master-telkom/master-telkom', name: 'Master Telkom', element: masterTelkom},
+  { path: '/telepon-admin/master-telkom', name: 'Master Telkom', element: masterTelkom},
 
   //NASABAH
   { path: '/nasabah/cek-saldo', name: 'Cek Saldo', element: cekSaldo},
