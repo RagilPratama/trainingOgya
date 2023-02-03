@@ -28,7 +28,7 @@ import {
 import { DocsExample } from 'src/components'
 import DataTable from 'react-data-table-component';
 import CIcon from '@coreui/icons-react';
-import { cilPlus } from '@coreui/icons';
+import { cilPlus, cilSave, cilX } from '@coreui/icons';
 import Swal from 'sweetalert2'
 
 class masterBank extends Component {
@@ -75,6 +75,26 @@ class masterBank extends Component {
         }).format(number);
     }
 
+    handleChangeNoRekening = (e) => {
+        this.setState({ noRekening: e.target.value.replace(/\D/, '') })
+    }
+
+    handleChangeNama = (e) => {
+        this.setState({ nama: e.target.value.replace(/[^a-zA-Z,. ]/g, '') })
+    }
+
+    handleChangeAlamat = (e) => {
+        this.setState({ alamat: e.target.value })
+    }
+
+    handleChangeNoTelepon = (e) => {
+        this.setState({ noTelepon: e.target.value.replace(/\D/, '') })
+    }
+
+    handleChangeSaldo = (e) => {
+        this.setState({ saldo: e.target.value.replace(/\D/, '') })
+    }
+
     handleOpenModal = () => {
         this.setState({ openModal: !this.state.openModal })
     }
@@ -107,7 +127,7 @@ class masterBank extends Component {
                 },
             },
             {
-                name: 'No Rekening',
+                name: 'No. Rekening',
                 selector: row => row.noRekening,
             },
             {
@@ -119,7 +139,7 @@ class masterBank extends Component {
                 selector: row => row.alamat
             },
             {
-                name: 'No Telepon',
+                name: 'No. Telepon',
                 selector: row => row.noTelepon
             },
             {
@@ -203,7 +223,7 @@ class masterBank extends Component {
                 <CCol xs={12}>
                     <CCard className="mb-4">
                         <CCardHeader>
-                            <strong>Master Bank</strong>
+                            <strong> Master Bank </strong>
                             <div className="d-grid gap-2 d-md-flex justify-content-md-end">
                                 <CButton color="primary" className="me-md-2" style={{ marginBottom: '20px' }} onClick={this.handleOpenModal}><CIcon icon={cilPlus} /> Tambah </CButton>
                             </div>
@@ -224,35 +244,55 @@ class masterBank extends Component {
                 </CCol>
 
                 <>
-                    <CModal alignment="center" visible={this.state.openModal} onClose={this.handleOpenModal}>
+                    <CModal alignment="center" style={{ width: '100%', height: '100%' }} visible={this.state.openModal} onClose={this.handleOpenModal}>
                         <CModalHeader>
                             <CModalTitle>Tambah Data</CModalTitle>
                         </CModalHeader>
                         <CModalBody>
                             <div>
-                                <CRow className="form-group row mt-2">
+                                <CRow className="form-group row mt-4">
+                                    <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">No. Rekening</CFormLabel>
+                                    <CCol xs="10" md="8" className="mt-2">
+                                        <CFormInput size='md' type="text" id="noRekening" placeholder="Masukkan No Rekening" onChange={this.handleChangeNoRekening} value={this.state.noRekening} />
+                                    </CCol>
+                                </CRow>
+
+                                <CRow className="form-group row mt-4">
                                     <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">Nama</CFormLabel>
                                     <CCol xs="10" md="8" className="mt-2">
-                                        {this.state.nama}
+                                        <CFormInput size='md' type="text" id="nama" placeholder="Masukkan Nama Lengkap" onChange={this.handleChangeNama} value={this.state.nama} />
                                     </CCol>
                                 </CRow>
-                                <br></br>
-                                <CRow className="form-group row mt-2">
-                                    <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">No Rekening</CFormLabel>
+
+                                <CRow className="form-group row mt-4">
+                                    <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">Alamat</CFormLabel>
                                     <CCol xs="10" md="8" className="mt-2">
-                                        {this.state.noRekening}
+                                        <CFormInput size='md' type="text" id="alamat" placeholder="Masukkan Alamat" onChange={this.handleChangeAlamat} value={this.state.alamat} />
                                     </CCol>
                                 </CRow>
-                                <br></br>
-                                <CRow className="form-group row mt-2">
+
+                                <CRow className="form-group row mt-4">
+                                    <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">No. Telepon</CFormLabel>
+                                    <CCol xs="10" md="8" className="mt-2">
+                                        <CFormInput size='md' type="text" id="noTelepon" placeholder="Masukkan No. Telepon" onChange={this.handleChangeNoTelepon} value={this.state.noTelepon} />
+                                    </CCol>
+                                </CRow>
+
+                                <CRow className="form-group row mt-4 mb-4">
                                     <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">Saldo</CFormLabel>
                                     <CCol xs="10" md="8" className="mt-2">
-                                        <strong>{this.formatRupiah(this.state.saldo)} </strong>
+                                        <CFormInput size='md' type="text" id="saldo" placeholder="Masukkan Saldo" onChange={this.handleChangeSaldo} value={this.state.saldo} />
                                     </CCol>
                                 </CRow>
                             </div>
                         </CModalBody>
                         <CModalFooter>
+                            <CButton color="danger" onClick={() => this.setState({ openModal: false })}>
+                                Batal
+                            </CButton>
+                            <CButton color="primary" onClick={() => this.addData}>
+                                Simpan
+                            </CButton>
                         </CModalFooter>
                     </CModal>
                 </>
