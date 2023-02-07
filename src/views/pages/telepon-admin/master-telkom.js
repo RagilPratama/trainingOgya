@@ -173,21 +173,21 @@ class masterTelkom extends Component {
                 name: 'User ID',
                 selector: row => row.USER_ID
             },
-            {
-                name: 'Aksi',
-                selector: row => {
-                    return <td>
-                        <CButtonGroup>
-                            <CButton size='sm' color="success" shape="rounded" style={{ marginRight: '10px' }} onClick={(e) => this.handleOpenModalEdit(row)}><CIcon size='sm' icon={cilPencil} />
-                                Edit
-                            </CButton>
-                            <CButton size='sm' color="danger" shape="rounded" onClick={(e) => this.delete(row)}><CIcon size='sm' icon={cilTrash} />
-                                Delete
-                            </CButton>
-                        </CButtonGroup>
-                    </td>
-                }
-            },
+            // {
+            //     name: 'Aksi',
+            //     selector: row => {
+            //         return <td>
+            //             <CButtonGroup>
+            //                 <CButton size='sm' color="success" shape="rounded" style={{ marginRight: '10px' }} onClick={(e) => this.handleOpenModalEdit(row)}><CIcon size='sm' icon={cilPencil} />
+            //                     Edit
+            //                 </CButton>
+            //                 <CButton size='sm' color="danger" shape="rounded" onClick={(e) => this.delete(row)}><CIcon size='sm' icon={cilTrash} />
+            //                     Delete
+            //                 </CButton>
+            //             </CButtonGroup>
+            //         </td>
+            //     }
+            // },
         ];
 
         const customStyles = {
@@ -217,9 +217,9 @@ class masterTelkom extends Component {
                     <CCard className="mb-4">
                         <CCardHeader>
                             <strong> Master Telkom </strong>
-                            <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                            {/* <div className="d-grid gap-2 d-md-flex justify-content-md-end">
                                 <CButton color="primary" className="me-md-2" style={{ marginBottom: '20px' }} onClick={this.handleOpenModal}><CIcon icon={cilPlus} /> Tambah </CButton>
-                            </div>
+                            </div> */}
                         </CCardHeader>
                         <CCardBody>
                             <DataTable

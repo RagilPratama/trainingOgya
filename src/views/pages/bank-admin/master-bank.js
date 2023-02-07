@@ -43,7 +43,6 @@ class masterBank extends Component {
             noRekening: '',
             saldo: '',
             userID_option: [],
-            statusEdit: false,
 
             // data table
             userId: '',
@@ -51,6 +50,7 @@ class masterBank extends Component {
             alamat: '',
             noTelepon: '',
 
+            statusEdit: false,
             blocking: false,
             openModalTambah: false,
             openModalEdit: false,
