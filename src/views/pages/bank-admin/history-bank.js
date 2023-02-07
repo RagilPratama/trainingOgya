@@ -17,8 +17,6 @@ import {
 import { DocsExample } from 'src/components'
 import DataTable from 'react-data-table-component';
 
-// const historyBank = () => {
-
 class historyBank extends Component {
     constructor(props) {
         super(props);
@@ -71,18 +69,13 @@ class historyBank extends Component {
                 },
             },
             {
-                // key: 'tanggal',
-                // label: 'Tanggal',
-                // _props: { scope: 'col' },
                 name: 'Tanggal',
-        selector: row => row.tanggal,
+                selector: row => row.tanggal,
             },
             {
                 selector: row => row.noRekening,
                 name: 'No Rekening',
-                // _props: { scope: 'col' },
             },
-            
             {
                 name: 'Nominal',
                 selector: row => this.formatRupiah(row.uangNasabah),
@@ -91,51 +84,23 @@ class historyBank extends Component {
                 name: 'No Rekening Dituju',
                 selector: row => row.noRekeningDituju
             },
-            // {
-            //     key: 'noTelepon',
-            //     label: 'No Telepon',
-            // },
-            
-            
             {
                 name: 'Status Ket.',
                 selector: row => {
-                    if(row.statusKet === '1'){
+                    if (row.statusKet === '1') {
                         return 'Setor'
-                    } else if (row.statusKet === '2'){
+                    } else if (row.statusKet === '2') {
                         return 'Ambil'
-                    } else if (row.statusKet === '3'){
+                    } else if (row.statusKet === '3') {
                         return 'Transfer'
-                    } else if (row.statusKet === '4'){
+                    } else if (row.statusKet === '4') {
                         return 'Bayar Telepon'
                     } else {
                         return ''
                     }
                 }
             },
-        ]
-        // const items = [
-        //     {
-        //         id: 1,
-        //         // class: 'Mark',
-        //         norek: 'Otto',
-        //         norekdituju: '@mdo',
-        //         _cellProps: { id: { scope: 'row' } },
-        //     },
-        //     {
-        //         id: 2,
-        //         // class: 'Jacob',
-        //         norek: 'Thornton',
-        //         norekdituju: '@fat',
-        //         _cellProps: { id: { scope: 'row' } },
-        //     },
-        //     {
-        //         id: 3,
-        //         nama: 'Larry the Bird',
-        //         norek: '@twitter',
-        //         _cellProps: { id: { scope: 'row' }, class: { colSpan: 2 } },
-        //     },
-        // ]
+        ];
 
         const customStyles = {
             rows: {
@@ -157,18 +122,16 @@ class historyBank extends Component {
             },
         };
 
-
-
         return (
             <CRow>
                 <CCol xs={12}>
                     <CCard className="mb-4">
                         <CCardHeader>
-                            <strong>History Bank</strong>
+                            <strong> History Bank </strong>
                         </CCardHeader>
                         <CCardBody>
                             <DataTable
-                            pagination
+                                pagination
                                 columns={columns}
                                 data={this.state.items}
                                 responsive
@@ -176,64 +139,6 @@ class historyBank extends Component {
                                 striped
                                 customStyles={customStyles}>
                             </DataTable>
-
-                            {/* <CSmartTable
-                                items={this.state.items}
-                                fields={columns}
-                                columnFilter
-                                tableFilter
-                                footer
-                                itemsPerPageSelect
-                                itemsPerPage={5}
-                                hover
-                                sorter
-                                pagination
-                                scopedSlots={{
-                                    'status':
-                                        (item) => (
-                                            <td>
-                                                <CBadge color={getBadge(item.status)}>
-                                                    {item.status}
-                                                </CBadge>
-                                            </td>
-                                        ),
-                                    'show_details':
-                                        (item, index) => {
-                                            return (
-                                                <td className="py-2">
-                                                    <CButton
-                                                        color="primary"
-                                                        variant="outline"
-                                                        shape="square"
-                                                        size="sm"
-                                                        onClick={() => { toggleDetails(index) }}
-                                                    >
-                                                        {details.includes(index) ? 'Hide' : 'Show'}
-                                                    </CButton>
-                                                </td>
-                                            )
-                                        },
-                                    'details':
-                                        (item, index) => {
-                                            return (
-                                                <CCollapse show={details.includes(index)}>
-                                                    <CCardBody>
-                                                        <h4>
-                                                            {item.username}
-                                                        </h4>
-                                                        <p className="text-muted">User since: {item.registered}</p>
-                                                        <CButton size="sm" color="info">
-                                                            User Settings
-                                                        </CButton>
-                                                        <CButton size="sm" color="danger" className="ml-1">
-                                                            Delete
-                                                        </CButton>
-                                                    </CCardBody>
-                                                </CCollapse>
-                                            )
-                                        }
-                                }}
-                            /> */}
                         </CCardBody>
                     </CCard>
                 </CCol>

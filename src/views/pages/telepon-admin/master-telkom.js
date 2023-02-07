@@ -23,12 +23,14 @@ import {
     CModalHeader,
     CModalBody,
     CModalFooter,
-    CModalTitle
+    CModalTitle,
+    CFormSelect,
+    CButtonGroup
 } from '@coreui/react'
 import { DocsExample } from 'src/components'
 import DataTable from 'react-data-table-component';
 import CIcon from '@coreui/icons-react';
-import { cilPlus, cilSave, cilX } from '@coreui/icons';
+import { cilPencil, cilPlus, cilSave, cilTrash, cilX } from '@coreui/icons';
 import Swal from 'sweetalert2'
 
 class masterTelkom extends Component {
@@ -44,8 +46,11 @@ class masterTelkom extends Component {
             noTelepon: null,
             saldo: null,
             user_id: null,
+            userID_option: [],
 
-            openModal: false,
+            blocking: false,
+            openModalTambah: false,
+            openModalEdit: false,
             currentPage: 1,
             sizePerPage: 5,
         }
@@ -95,8 +100,29 @@ class masterTelkom extends Component {
         this.setState({ saldo: e.target.value.replace(/\D/, '') })
     }
 
-    handleOpenModal = () => {
-        this.setState({ openModal: !this.state.openModal })
+    handleOpenModalTambah = () => {
+        this.setState({ openModalTambah: true })
+    }
+
+    handleCloseModalTambah = () => {
+        this.setState({ openModalTambah: false })
+    }
+
+    handleOpenModalEdit = (row) => {
+        console.log(row, "<<<<< ROW EDIT")
+        this.setState({ openModalEdit: true })
+        this.setState({
+            userId: row.userID,
+            nama: row.nama,
+            alamat: row.alamat,
+            noTelepon: row.noTelepon,
+            noRekening: row.noRekening,
+            saldo: row.saldo
+        })
+    }
+
+    handleCloseModalEdit = () => {
+        this.setState({ openModalEdit: false })
     }
 
     addData = () => {
@@ -142,57 +168,27 @@ class masterTelkom extends Component {
                 name: 'No. Telepon',
                 selector: row => row.NO_TELP
             },
-            
+
             {
                 name: 'User ID',
                 selector: row => row.USER_ID
             },
             {
                 name: 'Aksi',
-                // cell: (cellContent, row) => (
-                //     <td>
-                //         <CButtonGroup>
-                //             <CButton color="primary"> Edit </CButton>
-                //         </CButtonGroup>
-                //     </td>
-                // )
-                formatter: (value, row, index, field) => {
+                selector: row => {
                     return <td>
                         <CButtonGroup>
-                            <CButton type="button" class="btn btn-default btn-sm" onclick={this.edit}>,
-                                <i class="far fa-pencil-alt"></i>
+                            <CButton size='sm' color="success" shape="rounded" style={{ marginRight: '10px' }} onClick={(e) => this.handleOpenModalEdit(row)}><CIcon size='sm' icon={cilPencil} />
+                                Edit
                             </CButton>
-                            <CButton type="button" class="btn btn-default btn-sm" onclick={this.delete}>,
-                                <i class="far fa-trash-alt"></i>
+                            <CButton size='sm' color="danger" shape="rounded" onClick={(e) => this.delete(row)}><CIcon size='sm' icon={cilTrash} />
+                                Delete
                             </CButton>
                         </CButtonGroup>
                     </td>
                 }
             },
         ];
-
-        // const items = [
-        //     {
-        //         id: 1,
-        //         // class: 'Mark',
-        //         norek: 'Otto',
-        //         norekdituju: '@mdo',
-        //         _cellProps: { id: { scope: 'row' } },
-        //     },
-        //     {
-        //         id: 2,
-        //         // class: 'Jacob',
-        //         norek: 'Thornton',
-        //         norekdituju: '@fat',
-        //         _cellProps: { id: { scope: 'row' } },
-        //     },
-        //     {
-        //         id: 3,
-        //         nama: 'Larry the Bird',
-        //         norek: '@twitter',
-        //         _cellProps: { id: { scope: 'row' }, class: { colSpan: 2 } },
-        //     },
-        // ]
 
         const customStyles = {
             rows: {
@@ -240,38 +236,53 @@ class masterTelkom extends Component {
                     </CCard>
                 </CCol>
 
+                {/* // FORM TAMBAH DATA  */}
                 <>
-                    <CModal alignment="center" style={{ width: '100%', height: '100%' }} visible={this.state.openModal} onClose={this.handleOpenModal}>
+                    <CModal alignment="center" style={{ width: '100%', height: '100%' }} visible={this.state.openModalTambah} onClose={this.handleCloseModalTambah}>
                         <CModalHeader>
                             <CModalTitle>Tambah Data</CModalTitle>
                         </CModalHeader>
                         <CModalBody>
                             <div>
-                                <CRow className="form-group row mt-4">
-                                    <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">No. Rekening</CFormLabel>
+                                <CRow className="form-group row mt-4 mb-4">
+                                    <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">User ID</CFormLabel>
                                     <CCol xs="10" md="8" className="mt-2">
-                                        <CFormInput size='md' type="text" id="noRekening" placeholder="Masukkan No Rekening" onChange={this.handleChangeNoRekening} value={this.state.noRekening} />
+                                        <CFormSelect size='md' id="userId" name="userId" onChange={this.handleChangeUserID}>
+                                            <option value=''>Silakan Pilih</option>
+                                            {this.state.userID_option.map((el) => {
+                                                return (
+                                                    <option value={el.value}>{el.label}</option>
+                                                )
+                                            })}
+                                        </CFormSelect>
                                     </CCol>
                                 </CRow>
 
                                 <CRow className="form-group row mt-4">
                                     <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">Nama</CFormLabel>
                                     <CCol xs="10" md="8" className="mt-2">
-                                        <CFormInput size='md' type="text" id="nama" placeholder="Masukkan Nama Lengkap" onChange={this.handleChangeNama} value={this.state.nama} />
+                                        <CFormInput size='md' type="text" id="nama" placeholder="Masukkan Nama Lengkap" onChange={this.handleChangeNama} value={this.state.nama} disabled />
                                     </CCol>
                                 </CRow>
 
                                 <CRow className="form-group row mt-4">
                                     <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">Alamat</CFormLabel>
                                     <CCol xs="10" md="8" className="mt-2">
-                                        <CFormInput size='md' type="text" id="alamat" placeholder="Masukkan Alamat" onChange={this.handleChangeAlamat} value={this.state.alamat} />
+                                        <CFormInput size='md' type="text" id="alamat" placeholder="Masukkan Alamat" onChange={this.handleChangeAlamat} value={this.state.alamat} disabled />
                                     </CCol>
                                 </CRow>
 
                                 <CRow className="form-group row mt-4">
                                     <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">No. Telepon</CFormLabel>
                                     <CCol xs="10" md="8" className="mt-2">
-                                        <CFormInput size='md' type="text" id="noTelepon" placeholder="Masukkan No. Telepon" onChange={this.handleChangeNoTelepon} value={this.state.noTelepon} />
+                                        <CFormInput size='md' type="text" id="noTelepon" placeholder="Masukkan No. Telepon" onChange={this.handleChangeNoTelepon} value={this.state.noTelepon} disabled />
+                                    </CCol>
+                                </CRow>
+
+                                <CRow className="form-group row mt-4">
+                                    <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">No. Rekening</CFormLabel>
+                                    <CCol xs="10" md="8" className="mt-2">
+                                        <CFormInput size='md' type="text" id="noRekening" placeholder="Masukkan No Rekening" onChange={this.handleChangeNoRekening} value={this.state.noRekening} />
                                     </CCol>
                                 </CRow>
 
@@ -284,73 +295,78 @@ class masterTelkom extends Component {
                             </div>
                         </CModalBody>
                         <CModalFooter>
-                            <CButton color="danger" onClick={() => this.setState({ openModal: false })}>
+                            <CButton color="danger" onClick={this.handleCloseModalTambah}>
                                 Batal
                             </CButton>
-                            <CButton color="primary" onClick={() => this.addData}>
+                            <CButton color="primary" onClick={this.addData}>
                                 Simpan
                             </CButton>
                         </CModalFooter>
                     </CModal>
                 </>
 
-                {/* <CSmartTable
-                                items={this.state.items}
-                                fields={columns}
-                                columnFilter
-                                tableFilter
-                                footer
-                                itemsPerPageSelect
-                                itemsPerPage={5}
-                                hover
-                                sorter
-                                pagination
-                                scopedSlots={{
-                                    'status':
-                                        (item) => (
-                                            <td>
-                                                <CBadge color={getBadge(item.status)}>
-                                                    {item.status}
-                                                </CBadge>
-                                            </td>
-                                        ),
-                                    'show_details':
-                                        (item, index) => {
-                                            return (
-                                                <td className="py-2">
-                                                    <CButton
-                                                        color="primary"
-                                                        variant="outline"
-                                                        shape="square"
-                                                        size="sm"
-                                                        onClick={() => { toggleDetails(index) }}
-                                                    >
-                                                        {details.includes(index) ? 'Hide' : 'Show'}
-                                                    </CButton>
-                                                </td>
-                                            )
-                                        },
-                                    'details':
-                                        (item, index) => {
-                                            return (
-                                                <CCollapse show={details.includes(index)}>
-                                                    <CCardBody>
-                                                        <h4>
-                                                            {item.username}
-                                                        </h4>
-                                                        <p className="text-muted">User since: {item.registered}</p>
-                                                        <CButton size="sm" color="info">
-                                                            User Settings
-                                                        </CButton>
-                                                        <CButton size="sm" color="danger" className="ml-1">
-                                                            Delete
-                                                        </CButton>
-                                                    </CCardBody>
-                                                </CCollapse>
-                                            )
-                                        }
-                                }}
-                            /> */}
+
+                {/* // FORM EDIT DATA */}
+                <>
+                    <CModal alignment="center" style={{ width: '100%', height: '100%' }} visible={this.state.openModalEdit} onClose={this.handleCloseModalEdit}>
+                        <CModalHeader>
+                            <CModalTitle>Edit Data</CModalTitle>
+                        </CModalHeader>
+                        <CModalBody>
+                            <div>
+                                <CRow className="form-group row mt-4 mb-4">
+                                    <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">User ID</CFormLabel>
+                                    <CCol xs="10" md="8" className="mt-2">
+                                        <CFormInput size='md' id="userId" name="userId" onChange={this.handleChangeUserID} value={this.state.userId} disabled />
+                                    </CCol>
+                                </CRow>
+
+                                <CRow className="form-group row mt-4">
+                                    <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">Nama</CFormLabel>
+                                    <CCol xs="10" md="8" className="mt-2">
+                                        <CFormInput size='md' type="text" id="nama" placeholder="Masukkan Nama Lengkap" onChange={this.handleChangeNama} value={this.state.nama} disabled />
+                                    </CCol>
+                                </CRow>
+
+                                <CRow className="form-group row mt-4">
+                                    <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">Alamat</CFormLabel>
+                                    <CCol xs="10" md="8" className="mt-2">
+                                        <CFormInput size='md' type="text" id="alamat" placeholder="Masukkan Alamat" onChange={this.handleChangeAlamat} value={this.state.alamat} disabled />
+                                    </CCol>
+                                </CRow>
+
+                                <CRow className="form-group row mt-4">
+                                    <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">No. Telepon</CFormLabel>
+                                    <CCol xs="10" md="8" className="mt-2">
+                                        <CFormInput size='md' type="text" id="noTelepon" placeholder="Masukkan No. Telepon" onChange={this.handleChangeNoTelepon} value={this.state.noTelepon} disabled />
+                                    </CCol>
+                                </CRow>
+
+                                <CRow className="form-group row mt-4">
+                                    <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">No. Rekening</CFormLabel>
+                                    <CCol xs="10" md="8" className="mt-2">
+                                        <CFormInput size='md' type="text" id="noRekening" placeholder="Masukkan No Rekening" onChange={this.handleChangeNoRekening} value={this.state.noRekening} disabled />
+                                    </CCol>
+                                </CRow>
+
+                                <CRow className="form-group row mt-4 mb-4">
+                                    <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">Saldo</CFormLabel>
+                                    <CCol xs="10" md="8" className="mt-2">
+                                        <CFormInput size='md' type="text" id="saldo" placeholder="Masukkan Saldo" onChange={this.handleChangeSaldo} value={this.state.saldo} />
+                                    </CCol>
+                                </CRow>
+                            </div>
+                        </CModalBody>
+                        <CModalFooter>
+                            <CButton color="danger" onClick={this.handleCloseModalEdit}>
+                                Batal
+                            </CButton>
+                            <CButton color="primary" onClick={this.edit}>
+                                Simpan
+                            </CButton>
+                        </CModalFooter>
+                    </CModal>
+                </>
             </CRow>
         );
     }

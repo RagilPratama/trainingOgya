@@ -45,7 +45,7 @@ class masterBank extends Component {
             userID_option: [],
             statusEdit: false,
 
-            // data table users
+            // data table
             userId: '',
             nama: '',
             alamat: '',
@@ -430,7 +430,7 @@ class masterBank extends Component {
                 </CCol>
 
 
-                // FORM TAMBAH DATA
+                {/* // FORM TAMBAH DATA  */}
                 <>
                     <CModal alignment="center" style={{ width: '100%', height: '100%' }} visible={this.state.openModalTambah} onClose={this.handleCloseModalTambah}>
                         <CModalHeader>
@@ -500,7 +500,7 @@ class masterBank extends Component {
                 </>
 
 
-                // FORM EDIT DATA
+                {/* // FORM EDIT DATA */}
                 <>
                     <CModal alignment="center" style={{ width: '100%', height: '100%' }} visible={this.state.openModalEdit} onClose={this.handleCloseModalEdit}>
                         <CModalHeader>
@@ -561,7 +561,6 @@ class masterBank extends Component {
                         </CModalFooter>
                     </CModal>
                 </>
-
             </CRow>
         );
     }
