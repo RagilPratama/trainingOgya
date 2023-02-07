@@ -30,7 +30,6 @@ import { DocsExample } from 'src/components'
 import DataTable from 'react-data-table-component';
 import Swal from 'sweetalert2'
 
-// const historyBank = () => {
 
 class setorTunai extends Component {
     constructor(props) {
@@ -40,12 +39,15 @@ class setorTunai extends Component {
             datas: [],
             items: [],
             openModal: false,
-            noRekening: '',
             dataRekening: [],
+            userID: '',
             nama: '',
+            alamat: '',
+            noTelepon: '',
+            noRekening: '',
             saldo: '',
-            jumlah: 0,
-
+            jumlah: '',
+            blocking: false,
         }
     }
 
@@ -64,9 +66,25 @@ class setorTunai extends Component {
     handleChange = (e) => {
         this.setState({ noRekening: e.target.value })
     }
+
     handleChangeJumlah = (e) => {
-        this.setState({ jumlah: e.target.value })
+        this.setState({ jumlah: e.target.value.replace(/\D/, '') })
     }
+
+    // getmasterBank = () => {
+    //     this.setState({ blocking: true });
+    //     fetch(
+    //         "http://localhost:7070/api/master-bank/getMasterBank")
+    //         .then((res) => res.json())
+    //         .then((json) => {
+    //             this.setState({
+    //                 items: json.data.data,
+    //                 DataisLoaded: true
+    //             }, () => console.log(json));
+    //         }).catch((error) => {
+    //             this.setState({ blocking: false });
+    //         });
+    // }
 
     getSaldo = () => {
         if (this.state.noRekening !== '') {
@@ -80,6 +98,7 @@ class setorTunai extends Component {
 
                         let arr = json.data.data
                         this.setState({ dataRekening: arr }, () => this.cekSaldo())
+                        // console.log('Data Rekening >>', arr);
                     } else {
                         Swal.fire({
                             title: 'Info!',
@@ -90,7 +109,6 @@ class setorTunai extends Component {
                     }
                     console.log('json >>', json.data.data);
                 })
-
         } else {
             Swal.fire({
                 title: 'Info!',
@@ -101,44 +119,102 @@ class setorTunai extends Component {
         }
     }
 
+    // formatRupiah = (number) => {
+    //     return new Intl.NumberFormat("id-ID", {
+    //         style: "currency",
+    //         currency: "IDR"
+    //     }).format(number);
+    // }
+
     cekSaldo = (e) => {
         const nama = this.state.dataRekening[0].nama
         const saldo = this.state.dataRekening[0].saldo
         console.log(nama)
         this.setState({ openModal: true, nama: nama, saldo: saldo })
-
     }
 
-    setorTunai = (e) => {
-        console.log('nominal setor', this.state.jumlah)
+    setorTunai = () => {
+        console.log(this.state.dataRekening[0], "<<<<< STATUS")
+        console.log(this.state.jumlah, "<<<<< JUMLAH")
 
+        var s = parseInt(this.state.dataRekening[0].saldo)
+        var j = parseInt(this.state.jumlah)
+        var total = s + j
+        console.log(total, "<<<<< Total")
+
+        const requestOptions = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer my-token',
+                'My-Custom-Header': 'foobar'
+            },
+            body: JSON.stringify({
+                userID: parseInt(this.state.dataRekening[0].userID),
+                nama: this.state.dataRekening[0].nama,
+                alamat: this.state.dataRekening[0].alamat,
+                noTelepon: parseInt(this.state.dataRekening[0].noTelepon),
+                noRekening: parseInt(this.state.dataRekening[0].noRekening),
+                saldo: total,
+            })
+        };
+
+        fetch("http://localhost:7070/api/master-bank/update", requestOptions)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                // console.log(responseJson, "<<<<< STATUS")
+                if (responseJson && responseJson.status === 200) {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Setor Tunai Berhasil & Saldo Berhasil Diperbarui',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    })
+                    this.setState({
+                        userID: '',
+                        nama: '',
+                        alamat: '',
+                        noTelepon: '',
+                        noRekening: '',
+                        saldo: '',
+                        jumlah: '',
+                    })
+                    this.setState({ blocking: false, openModal: false })
+                } else {
+                    Swal.fire({
+                        title: '',
+                        text: 'Setor Tunai Gagal',
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    })
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
 
     handleOpenModal = () => {
-        this.setState({ openModal: !this.state.openModal })
+        this.setState({ openModal: true })
     }
 
+    handleCloseModal = () => {
+        this.setState({ openModal: false })
+    }
 
     render() {
         const columns = [
             {
-                // key: 'idTransaksiNasabah',
-                // label: 'ID Transaksi',
-                // _props: { scope: 'col' },
                 name: 'idTransaksiNasabah',
                 selector: row => row.idTransaksiNasabah,
             },
             {
-                // key: 'tanggal',
-                // label: 'Tanggal',
-                // _props: { scope: 'col' },
                 name: 'Tanggal',
                 selector: row => row.tanggal,
             },
             {
                 selector: row => row.noRekening,
                 name: 'No Rekening',
-                // _props: { scope: 'col' },
             },
             {
                 key: 'statusKet',
@@ -165,29 +241,7 @@ class setorTunai extends Component {
                 label: 'No Telepon',
                 _props: { scope: 'col' },
             },
-        ]
-        // const items = [
-        //     {
-        //         id: 1,
-        //         // class: 'Mark',
-        //         norek: 'Otto',
-        //         norekdituju: '@mdo',
-        //         _cellProps: { id: { scope: 'row' } },
-        //     },
-        //     {
-        //         id: 2,
-        //         // class: 'Jacob',
-        //         norek: 'Thornton',
-        //         norekdituju: '@fat',
-        //         _cellProps: { id: { scope: 'row' } },
-        //     },
-        //     {
-        //         id: 3,
-        //         nama: 'Larry the Bird',
-        //         norek: '@twitter',
-        //         _cellProps: { id: { scope: 'row' }, class: { colSpan: 2 } },
-        //     },
-        // ]
+        ];
 
         const customStyles = {
             rows: {
@@ -208,8 +262,6 @@ class setorTunai extends Component {
                 },
             },
         };
-
-
 
         return (
             <CRow>
@@ -240,7 +292,7 @@ class setorTunai extends Component {
                 </CCol>
 
                 <>
-                    <CModal alignment="center" visible={this.state.openModal} onClose={this.handleOpenModal}>
+                    <CModal alignment="center" visible={this.state.openModal} onClose={this.handleCloseModal}>
                         <CModalHeader>
                             <CModalTitle>Detail Rekening</CModalTitle>
                         </CModalHeader>
@@ -263,8 +315,7 @@ class setorTunai extends Component {
                                 <CRow className="form-group row mt-2">
                                     <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">Nominal Setoran</CFormLabel>
                                     <CCol xs="10" md="8" className="mt-2">
-                                        <CFormInput size='md' type="number" id="jumlah" placeholder="Masukkan nominal setoran" onChange={this.handleChangeJumlah} value={this.state.jumlah} />
-
+                                        <CFormInput size='md' type="text" id="jumlah" placeholder="Masukkan nominal setoran" onChange={this.handleChangeJumlah} value={this.state.jumlah} />
                                     </CCol>
                                 </CRow>
                                 <br></br>
