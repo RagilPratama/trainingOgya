@@ -93,9 +93,7 @@ class setorTunai extends Component {
             ).then((res) => res.json())
                 .then((json) => {
 
-
                     if (json.data.data.length !== 0) {
-
                         let arr = json.data.data
                         this.setState({ dataRekening: arr }, () => this.cekSaldo())
                         // console.log('Data Rekening >>', arr);
