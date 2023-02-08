@@ -7,6 +7,7 @@ import {
   cilPencil,
   cilPeople,
   cilPhone,
+  cilTransfer,
   cilUser,
   cilWallet,
 } from '@coreui/icons'
@@ -61,12 +62,12 @@ const _nav = [
     to: '/nasabah/tarik-tunai',
     icon: <CIcon icon={cilBank} customClassName="nav-icon" />,
   },
-  // {
-  //   component: CNavItem,
-  //   name: 'Transfer',
-  //   to: '/nasabah/transfer',
-  //   icon: <CIcon icon={cilBank} customClassName="nav-icon" />,
-  // },
+  {
+    component: CNavItem,
+    name: 'Transfer',
+    to: '/nasabah/transfer',
+    icon: <CIcon icon={cilMoney} customClassName="nav-icon" />,
+  },
   // {
   //   component: CNavItem,
   //   name: 'Bayar Telpon',

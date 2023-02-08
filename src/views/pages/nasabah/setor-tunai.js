@@ -67,6 +67,10 @@ class setorTunai extends Component {
         this.setState({ noRekening: e.target.value })
     }
 
+    handleChangeNoRekening = (e) => {
+        this.setState({ noRekening: e.target.value.replace(/\D/, '') })
+    }
+
     handleChangeJumlah = (e) => {
         this.setState({ jumlah: e.target.value.replace(/\D/, '') })
     }
@@ -274,7 +278,7 @@ class setorTunai extends Component {
                             <CRow className="form-group row mt-2">
                                 <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">No. Rekening</CFormLabel>
                                 <CCol xs="10" md="8" className="mt-2">
-                                    <CFormInput size='md' type="number" id="noRekening" placeholder="Masukkan no rekening" onChange={this.handleChange} value={this.state.noRekening} />
+                                    <CFormInput size='md' type="text" id="noRekening" placeholder="Masukkan no rekening" onChange={this.handleChangeNoRekening} value={this.state.noRekening} />
                                 </CCol>
                             </CRow>
                             <br></br>

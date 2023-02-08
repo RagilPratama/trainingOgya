@@ -43,8 +43,6 @@ class masterBank extends Component {
             noRekening: '',
             saldo: '',
             userID_option: [],
-
-            // data table
             userId: '',
             nama: '',
             alamat: '',
