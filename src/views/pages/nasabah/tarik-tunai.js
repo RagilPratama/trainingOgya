@@ -158,6 +158,23 @@ class tarikTunai extends Component {
             })
         };
 
+        const reqInsert = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer my-token',
+                'My-Custom-Header': 'foobar'
+            },
+            body: JSON.stringify({
+                noTelepon: parseInt(this.state.dataRekening[0].noTelepon),
+                noRekeningDituju : 0,
+                statusKet: 2,
+                uangNasabah:parseInt(this.state.jumlah),
+                statusNasabah: 'K',
+                noRekening: parseInt(this.state.dataRekening[0].noRekening)
+            })
+        };
+
         if (j > s) {
             Swal.fire({
                 title: 'Info!',
@@ -166,39 +183,90 @@ class tarikTunai extends Component {
                 confirmButtonText: 'OK'
             })
         } else {
-            fetch("http://localhost:7070/api/master-bank/update", requestOptions)
-                .then((response) => response.json())
-                .then((responseJson) => {
+            // fetch("http://localhost:7070/api/master-bank/update", requestOptions)
+            //     .then((response) => response.json())
+            //     .then((responseJson) => {
+                    
+
+                    fetch("http://localhost:7070/api/transaksi-nasabah/insert", reqInsert)
+                    .then((response) => response.json())
+                    .then((res) => {
+                        if(res && res.status === 200){
+                            fetch("http://localhost:7070/api/master-bank/update", requestOptions)
+                                .then((resp) => resp.json())
+                                .then((response) => {
+
+                                    if(response && response.status === 200){
+                                        Swal.fire({
+                                            title: 'Success!',
+                                            text: 'Tarik Tunai Berhasil & Saldo Berhasil Diperbarui',
+                                            icon: 'success',
+                                            confirmButtonText: 'OK'
+                                        })
+                                        this.setState({
+                                            userID: '',
+                                            nama: '',
+                                            alamat: '',
+                                            noTelepon: '',
+                                            noRekening: '',
+                                            saldo: '',
+                                            jumlah: '',
+                                        })
+                                        this.setState({ blocking: false, openModal: false })
+                                    } else {
+                                        Swal.fire({
+                                            title: '',
+                                            text: 'Tarik Tunai Gagal',
+                                            icon: 'warning',
+                                            confirmButtonText: 'OK'
+                                        })
+                                    }
+                                })
+                                .catch((error) => {
+                                    console.error(error);
+                                });
+                        } else {
+                            Swal.fire({
+                                title: '',
+                                text: 'Tarik Tunai Gagal',
+                                icon: 'warning',
+                                confirmButtonText: 'OK'
+                            })
+                        }
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
                     // console.log(responseJson, "<<<<< STATUS")
-                    if (responseJson && responseJson.status === 200) {
-                        Swal.fire({
-                            title: 'Success!',
-                            text: 'Tarik Tunai Berhasil & Saldo Berhasil Diperbarui',
-                            icon: 'success',
-                            confirmButtonText: 'OK'
-                        })
-                        this.setState({
-                            userID: '',
-                            nama: '',
-                            alamat: '',
-                            noTelepon: '',
-                            noRekening: '',
-                            saldo: '',
-                            jumlah: '',
-                        })
-                        this.setState({ blocking: false, openModal: false })
-                    } else {
-                        Swal.fire({
-                            title: '',
-                            text: 'Tarik Tunai Gagal',
-                            icon: 'warning',
-                            confirmButtonText: 'OK'
-                        })
-                    }
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
+                    // if (responseJson && responseJson.status === 200) {
+                    //     Swal.fire({
+                    //         title: 'Success!',
+                    //         text: 'Tarik Tunai Berhasil & Saldo Berhasil Diperbarui',
+                    //         icon: 'success',
+                    //         confirmButtonText: 'OK'
+                    //     })
+                    //     this.setState({
+                    //         userID: '',
+                    //         nama: '',
+                    //         alamat: '',
+                    //         noTelepon: '',
+                    //         noRekening: '',
+                    //         saldo: '',
+                    //         jumlah: '',
+                    //     })
+                    //     this.setState({ blocking: false, openModal: false })
+                    // } else {
+                    //     Swal.fire({
+                    //         title: '',
+                    //         text: 'Tarik Tunai Gagal',
+                    //         icon: 'warning',
+                    //         confirmButtonText: 'OK'
+                    //     })
+                    // }
+                // })
+                // .catch((error) => {
+                //     console.error(error);
+                // });
         }
     }
 
