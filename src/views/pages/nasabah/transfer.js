@@ -41,17 +41,30 @@ class transfer extends Component {
             items: [],
             openModal: false,
             dataRekening: [],
-            userID: '',
+
+            // Pengirim
+            userIDPengirim: '',
             namaPengirim: '',
-            alamat: '',
-            noTelepon: '',
-            noRekening: '',
-            saldo: '',
-            jumlah: '',
+            alamatPengirim: '',
+            noTeleponPengirim: '',
+            noRekeningPengirim: '',
+            saldoPengirim: '',
+
+            // Penerima
+            userIDPenerima: '',
             namaPenerima: '',
-            noRekDituju: '',
-            noRekDituju_option: [],
+            alamatPenerima: '',
+            noTeleponPenerima: '',
+            noRekeningPenerima: '',
+            saldoPenerima: '',
+
+            jumlahTransfer: '',
+            noRekeningPenerima: '',
+            noRekeningPenerima_option: [],
             blocking: false,
+            rekeningpenerima: '',
+            valuedatapenerima: []
+
         }
     }
 
@@ -78,7 +91,7 @@ class transfer extends Component {
     }
 
     handleChangeJumlah = (e) => {
-        this.setState({ jumlah: e.target.value.replace(/\D/, '') })
+        this.setState({ jumlahTransfer: e.target.value.replace(/\D/, '') })
     }
 
     // getmasterBank = () => {
@@ -97,6 +110,11 @@ class transfer extends Component {
     // }
 
     getSaldo = () => {
+        let a = this.state.noRekeningPenerima_option;
+        const filterObj = a.filter((item) => item.value !== this.state.noRekening);
+        this.setState({
+            noRekeningPenerima_option: filterObj
+        })
         if (this.state.noRekening !== '') {
             fetch(
                 "http://localhost:7070/api/master-bank/getMasterBank?noRekening=" + this.state.noRekening
@@ -137,18 +155,25 @@ class transfer extends Component {
     cekSaldo = (e) => {
         const nama = this.state.dataRekening[0].nama
         const saldo = this.state.dataRekening[0].saldo
+
         console.log(nama)
-        this.setState({ openModal: true, namaPengirim: nama, saldo: saldo })
+        this.setState({ openModal: true, namaPengirim: nama, saldoPengirim: saldo })
     }
 
     transfer = () => {
-        console.log(this.state.dataRekening[0], "<<<<< STATUS")
-        console.log(this.state.jumlah, "<<<<< JUMLAH")
+        const saldopenerima = this.state.valuedatapenerima.filter((item) => item.noRekening === this.state.rekeningpenerima)
+        console.log(this.state.valuedatapenerima.filter((item) => item.noRekening === this.state.rekeningpenerima))
+        console.log(this.state.dataRekening[0], "<<<<< DATA REKENING")
+        console.log(this.state.valuedatapenerima, "<<<<< ZXZXZXZXZXZXZ")
+        console.log(this.state.jumlahTransfer, "<<<<< JUMLAH")
 
-        var s = parseInt(this.state.dataRekening[0].saldo)
-        var j = parseInt(this.state.jumlah)
-        var total = s + j
-        console.log(total, "<<<<< Total")
+        var saldo_pengirim = parseInt(this.state.dataRekening[0].saldo)
+        var jumlah_tranfer = parseInt(this.state.jumlahTransfer)
+        var transfer = saldo_pengirim - jumlah_tranfer
+
+        var saldo_penerima = parseInt(saldopenerima[0].saldo)
+        var jumlah_tranfer_diterima = parseInt(this.state.jumlahTransfer)
+        var transfer_diterima = jumlah_tranfer + saldo_penerima
 
         const requestOptions = {
             method: 'PUT',
@@ -163,47 +188,112 @@ class transfer extends Component {
                 alamat: this.state.dataRekening[0].alamat,
                 noTelepon: parseInt(this.state.dataRekening[0].noTelepon),
                 noRekening: parseInt(this.state.dataRekening[0].noRekening),
-                saldo: total,
+                saldo: transfer,
             })
         };
 
-        fetch("http://localhost:7070/api/master-bank/update", requestOptions)
-            .then((response) => response.json())
-            .then((responseJson) => {
-                // console.log(responseJson, "<<<<< STATUS")
-                if (responseJson && responseJson.status === 200) {
-                    Swal.fire({
-                        title: 'Success!',
-                        text: 'Setor Tunai Berhasil & Saldo Berhasil Diperbarui',
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    })
-                    this.setState({
-                        userID: '',
-                        nama: '',
-                        alamat: '',
-                        noTelepon: '',
-                        noRekening: '',
-                        saldo: '',
-                        jumlah: '',
-                    })
-                    this.setState({ blocking: false, openModal: false })
-                } else {
-                    Swal.fire({
-                        title: '',
-                        text: 'Setor Tunai Gagal',
-                        icon: 'warning',
-                        confirmButtonText: 'OK'
-                    })
-                }
+        const reqkurang = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer my-token',
+                'My-Custom-Header': 'foobar'
+            },
+            body: JSON.stringify({
+                userID: parseInt(saldopenerima[0].userID),
+                nama: saldopenerima[0].nama,
+                alamat: saldopenerima[0].alamat,
+                noTelepon: parseInt(saldopenerima[0].noTelepon),
+                noRekening: parseInt(saldopenerima[0].noRekening),
+                saldo: transfer_diterima,
             })
-            .catch((error) => {
-                console.error(error);
-            });
+        };
+
+        const reqInsert = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer my-token',
+                'My-Custom-Header': 'foobar'
+            },
+            body: JSON.stringify({
+                noTelepon: parseInt(this.state.dataRekening[0].noTelepon),
+                noRekeningDituju: parseInt(this.state.dataRekening[0].noRekening),
+                statusKet: 2,
+                uangNasabah: parseInt(this.state.jumlahTransfer),
+                statusNasabah: 'K',
+                noRekening: parseInt(this.state.dataRekening[0].noRekening)
+            })
+        };
+
+        var saldo_penerima = parseInt(this.state.noRekeningPenerima_option[0].saldo)
+        var jumlah_tranfer_diterima = parseInt(this.state.jumlahTransfer)
+        var transfer_diterima = saldo_penerima + jumlah_tranfer_diterima
+
+        if (jumlah_tranfer > saldo_pengirim) {
+            Swal.fire({
+                title: 'Info!',
+                text: 'Maaf, Saldo Tidak Cukup',
+                icon: 'info',
+                confirmButtonText: 'OK'
+            })
+        } else {
+            fetch("http://localhost:7070/api/transaksi-nasabah/insert", reqInsert)
+                .then((response) => response.json())
+                .then((res) => {
+                    fetch("http://localhost:7070/api/master-bank/update", requestOptions)
+                        .then((response) => response.json())
+                        .then((responseJsonS) => {
+                            // console.log(this.state.noRekeningPenerima_option,"APAPUN")
+                            fetch("http://localhost:7070/api/master-bank/update", reqkurang)
+                                .then((response) => response.json())
+                                .then((responseJson) => {
+                                    // console.log(responseJson, "<<<<< STATUS")
+                                    if (responseJson && responseJson.status === 200) {
+                                        Swal.fire({
+                                            title: 'Success!',
+                                            text: 'Berhasil Transfer',
+                                            icon: 'success',
+                                            confirmButtonText: 'OK'
+                                        })
+                                        this.setState({
+                                            userID: '',
+                                            nama: '',
+                                            alamat: '',
+                                            noTelepon: '',
+                                            noRekening: '',
+                                            saldo: '',
+                                            jumlahTransfer: '',
+                                        })
+                                        this.setState({ blocking: false, openModal: false })
+                                    } else {
+                                        Swal.fire({
+                                            title: '',
+                                            text: 'Gagal Transfer',
+                                            icon: 'warning',
+                                            confirmButtonText: 'OK'
+                                        })
+                                    }
+                                })
+                                .catch((error) => {
+                                    console.error(error);
+                                });
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                        });
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
     }
 
     handleNoRekeningTujuan = (e) => {
         console.log(e.target.value, "<<<< EVENT")
+        this.setState({
+            rekeningpenerima: e.target.value
+        })
 
         fetch(
             "http://localhost:7070/api/master-bank/getMasterBank?noRekening=" + e.target.value)
@@ -213,11 +303,12 @@ class transfer extends Component {
 
                 json.data.data.forEach((item) => {
                     this.setState({
-                        userId: item.userId,
+                        userIDPenerima: item.userID,
                         namaPenerima: item.nama,
-                        alamat: item.alamat,
-                        noTelepon: item.noTelepon,
-                        noRekDituju: item.noRekening
+                        alamatPenerima: item.alamat,
+                        noTeleponPenerima: item.noTelepon,
+                        noRekeningPenerima: item.noRekening,
+                        saldoPenerima: item.saldo
                     })
                 })
             }).catch((error) => {
@@ -227,22 +318,31 @@ class transfer extends Component {
 
     setNoRekeningTujuan = () => {
         this.setState({ blocking: true });
-        this.setState({ noRekDituju_option: [] })
+        this.setState({ noRekeningPenerima_option: [] })
         let newData = [];
         fetch(
             "http://localhost:7070/api/master-bank/getMasterBank")
             .then((res) => res.json())
             .then((json) => {
-                // console.log(json.data.data, "<<<<<< USERS")
+                console.log(json.data.data, "<<<<<< MMMMMMMMMMMMMMMMMMMMMMM")
 
                 json.data.data.forEach(el => {
-                    console.log(el, "<<<<< EL")
-                    const obj = { "value": el.noRekening, "label": el.nama }
+                    console.log(el, "<<<<< EL ZZZZZ")
+                    this.setState({
+                        userIDPenerima: el.userID,
+                        namaPenerima: el.nama,
+                        alamatPenerima: el.alamat,
+                        noTeleponPenerima: el.noTelepon,
+                        noRekeningPenerima: el.noRekening,
+                        saldoPenerima: el.saldo,
+                    })
+                    const obj = { "value": el.noRekening, "label": el.nama, "norek": el.saldo }
                     newData.push(obj);
                 });
-                console.log(newData, "<<<<<< NEW DATA")
+                console.log(json.data.data, "<<<<<< NEW DATA")
                 this.setState({
-                    noRekDituju_option: newData
+                    noRekeningPenerima_option: newData,
+                    valuedatapenerima: json.data.data
                 });
             }).catch((error) => {
                 this.setState({ blocking: false });
@@ -376,9 +476,9 @@ class transfer extends Component {
                                 <CRow className="form-group row mt-2">
                                     <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">Nama & No. Rekening</CFormLabel>
                                     <CCol xs="10" md="8" className="mt-2">
-                                        <CFormSelect size='md' id="noRekDituju" name="noRekDituju" onChange={this.handleNoRekeningTujuan}>
+                                        <CFormSelect size='md' id="noRekeningPenerima" name="noRekeningPenerima" onChange={this.handleNoRekeningTujuan}>
                                             <option value=''>Silakan Pilih</option>
-                                            {this.state.noRekDituju_option.map((el) => {
+                                            {this.state.noRekeningPenerima_option.map((el) => {
                                                 return (
                                                     <option value={el.value}>{el.label} ~ <span style={{ fontWeight: 'bold' }}> No. Rekening : {el.value} </span></option>
                                                 )
@@ -390,7 +490,7 @@ class transfer extends Component {
                                 <CRow className="form-group row mt-2">
                                     <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">Nominal Transfer</CFormLabel>
                                     <CCol xs="10" md="8" className="mt-2">
-                                        <CFormInput size='md' type="text" id="jumlah" placeholder="Masukkan nominal setoran" onChange={this.handleChangeJumlah} value={this.state.jumlah} />
+                                        <CFormInput size='md' type="text" id="jumlahTransfer" placeholder="Masukkan nominal setoran" onChange={this.handleChangeJumlah} value={this.state.jumlahTransfer} />
                                     </CCol>
                                 </CRow>
 
