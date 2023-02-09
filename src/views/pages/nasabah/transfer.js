@@ -40,6 +40,7 @@ class transfer extends Component {
             datas: [],
             items: [],
             openModal: false,
+            blocking: false,
             dataRekening: [],
 
             // Pengirim
@@ -59,10 +60,7 @@ class transfer extends Component {
             saldoPenerima: '',
 
             jumlahTransfer: '',
-            noRekeningPenerima: '',
             noRekeningPenerima_option: [],
-            blocking: false,
-            rekeningpenerima: '',
             valuedatapenerima: []
         }
     }
@@ -81,12 +79,8 @@ class transfer extends Component {
         this.setNoRekeningTujuan()
     }
 
-    handleChange = (e) => {
-        this.setState({ noRekening: e.target.value })
-    }
-
     handleChangeNoRekening = (e) => {
-        this.setState({ noRekening: e.target.value.replace(/\D/, '') })
+        this.setState({ noRekeningPengirim: e.target.value.replace(/\D/, '') })
     }
 
     handleChangeJumlah = (e) => {
@@ -110,13 +104,14 @@ class transfer extends Component {
 
     getSaldo = () => {
         let a = this.state.noRekeningPenerima_option;
-        const filterObj = a.filter((item) => item.value !== this.state.noRekening);
+        const filterObj = a.filter((item) => item.value !== this.state.noRekeningPengirim);
         this.setState({
             noRekeningPenerima_option: filterObj
         })
-        if (this.state.noRekening !== '') {
+
+        if (this.state.noRekeningPengirim !== '') {
             fetch(
-                "http://localhost:7070/api/master-bank/getMasterBank?noRekening=" + this.state.noRekening
+                "http://localhost:7070/api/master-bank/getMasterBank?noRekening=" + this.state.noRekeningPengirim
             ).then((res) => res.json())
                 .then((json) => {
 
@@ -127,7 +122,7 @@ class transfer extends Component {
                     } else {
                         Swal.fire({
                             title: 'Info!',
-                            text: 'No Rekening Tidak Ditemukan',
+                            text: 'No. Rekening Tidak Ditemukan',
                             icon: 'info',
                             confirmButtonText: 'OK'
                         })
@@ -137,7 +132,7 @@ class transfer extends Component {
         } else {
             Swal.fire({
                 title: 'Info!',
-                text: 'Mohon Masukkan No Rekening',
+                text: 'Mohon Masukkan No. Rekening',
                 icon: 'info',
                 confirmButtonText: 'OK'
             })
@@ -160,8 +155,8 @@ class transfer extends Component {
     }
 
     transfer = () => {
-        const data_penerima = this.state.valuedatapenerima.filter((item) => item.noRekening === this.state.rekeningpenerima)
-        console.log(this.state.valuedatapenerima.filter((item) => item.noRekening === this.state.rekeningpenerima))
+        const data_penerima = this.state.valuedatapenerima.filter((item) => item.noRekening === this.state.noRekeningPenerima)
+        console.log(this.state.valuedatapenerima.filter((item) => item.noRekening === this.state.noRekeningPenerima))
         console.log(this.state.dataRekening[0], "<<<<< DATA REKENING")
         console.log(this.state.valuedatapenerima, "<<<<< ZXZXZXZXZXZXZ")
         console.log(this.state.jumlahTransfer, "<<<<< JUMLAH")
@@ -307,7 +302,7 @@ class transfer extends Component {
     handleNoRekeningTujuan = (e) => {
         console.log(e.target.value, "<<<< EVENT")
         this.setState({
-            rekeningpenerima: e.target.value
+            noRekeningPenerima: e.target.value
         })
 
         fetch(
@@ -446,7 +441,7 @@ class transfer extends Component {
                             <CRow className="form-group row mt-2">
                                 <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">No. Rekening</CFormLabel>
                                 <CCol xs="10" md="8" className="mt-2">
-                                    <CFormInput size='md' type="text" id="noRekening" placeholder="Masukkan no rekening" onChange={this.handleChangeNoRekening} value={this.state.noRekening} />
+                                    <CFormInput size='md' type="text" id="noRekeningPengirim" placeholder="Masukkan no rekening" onChange={this.handleChangeNoRekening} value={this.state.noRekeningPengirim} />
                                 </CCol>
                             </CRow>
                             <br></br>
@@ -481,7 +476,7 @@ class transfer extends Component {
                                 <CRow className="form-group row mt-2">
                                     <CFormLabel htmlFor="staticEmail" className="col-sm-4 col-form-label row-form-input">No. Rekening</CFormLabel>
                                     <CCol xs="10" md="8" className="mt-2">
-                                        {this.state.noRekening}
+                                        {this.state.noRekeningPengirim}
                                     </CCol>
                                 </CRow>
 
