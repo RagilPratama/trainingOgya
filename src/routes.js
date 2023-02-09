@@ -62,6 +62,7 @@ const cekSaldo = React.lazy(() => import('./views/pages/nasabah/cek-saldo.js'))
 const setorTunai = React.lazy(() => import('./views/pages/nasabah/setor-tunai.js'))
 const tarikTunai = React.lazy(() => import('./views/pages/nasabah/tarik-tunai.js'))
 const transfer = React.lazy(() => import('./views/pages/nasabah/transfer.js'))
+const bayarTelepon = React.lazy(() => import('./views/pages/nasabah/bayar-telepon.js'))
 
 
 const routes = [
@@ -122,7 +123,7 @@ const routes = [
   { path: '/nasabah/setor-tunai', name: 'Setor Tunai', element: setorTunai},
   { path: '/nasabah/tarik-tunai', name: 'Tarik Tunai', element: tarikTunai},
   { path: '/nasabah/transfer', name: 'Transfer', element: transfer},
-
+  { path: '/nasabah/bayar-telepon', name: 'Bayar Telepon', element: bayarTelepon},
 ]
 
 export default routes

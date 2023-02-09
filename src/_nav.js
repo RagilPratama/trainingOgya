@@ -2,6 +2,8 @@ import React from 'react'
 import CIcon from '@coreui/icons-react'
 import {
   cilBank,
+  cilCash,
+  cilCreditCard,
   cilDollar,
   cilMoney,
   cilPencil,
@@ -54,25 +56,25 @@ const _nav = [
     component: CNavItem,
     name: 'Setor Tunai',
     to: '/nasabah/setor-tunai',
-    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilCreditCard} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,
     name: 'Tarik Tunai',
     to: '/nasabah/tarik-tunai',
-    icon: <CIcon icon={cilBank} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilCash} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,
     name: 'Transfer',
     to: '/nasabah/transfer',
-    icon: <CIcon icon={cilMoney} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilTransfer} customClassName="nav-icon" />,
   },
-  // {
-  //   component: CNavItem,
-  //   name: 'Bayar Telpon',
-  //   to: '/theme/typography',
-  //   icon: <CIcon icon={cilPhone} customClassName="nav-icon" />,
-  // },
+  {
+    component: CNavItem,
+    name: 'Bayar Telpon',
+    to: '/nasabah/bayar-telepon',
+    icon: <CIcon icon={cilPhone} customClassName="nav-icon" />,
+  },
 ]
 export default _nav
